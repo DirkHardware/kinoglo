@@ -56,7 +56,7 @@ class TreeViewFilterWindow(Gtk.Window):
 
         self.treeview = Gtk.TreeView(model=self.movie_filter)
         for i, column_title in enumerate(
-                ["Title", "Director", "Year", "Country", "Genre", "Size"]
+                ["Title", "Director", "Year", "Country", "Genre", "Directory", "Size"]
         ):
             renderer = Gtk.CellRendererText()
             column = Gtk.TreeViewColumn(column_title, renderer, text=i)
