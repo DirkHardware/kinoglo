@@ -46,14 +46,39 @@ class TreeViewFilterWindow(Gtk.Window):
             renderer = Gtk.CellRendererText()
             column = Gtk.TreeViewColumn(column_title, renderer, text=i)
             self.treeview.append_column(column)
-
+       
+        self.buttons = list()
+        for prog_language in ["Java", "C", "C++", "Python", "None"]:
+            button = Gtk.Button(label=prog_language)
+            self.buttons.append(button)
+            button.connect("clicked", self.on_selection_button_clicked)
+        
         # setting up the layout, putting the treeview in a scroll window and the buttons in a row
         # There's something about the presence of the buttons in the tutorial
         # that makes the treeview size properly
+        
         self.scrollable_treelist = Gtk.ScrolledWindow()
         self.scrollable_treelist.set_vexpand(True)
         self.grid.attach(self.scrollable_treelist, 0, 0, 8, 10)
+        self.grid.attach_next_to(
+        self.buttons[0], self.scrollable_treelist, Gtk.PositionType.BOTTOM, 1, 1)
+
+        for i, button in enumerate(self.buttons[1:]):
+            self.grid.attach_next_to(
+                button, self.buttons[i], Gtk.PositionType.RIGHT, 1, 1)
         self.scrollable_treelist.add(self.treeview)
+        
+        # Add menubar
+        self.menubar = Gtk.MenuBar()
+        self.menubar.set_hexpand(True)
+        self.menubar.set_vexpand(True)
+
+        self.menu_file = Gtk.MenuItem('File')
+        self.menubar.append(self.menu_file)
+        
+        self.grid.attach_next_to(self.menubar, self.scrollable_treelist, Gtk.PositionType.TOP, 1, 1)
+        #menu_preferences = self.submenu(menubar, 'Preferences')
+        #menu_filter = self.add_submenu(menubar, 'Filter')
 
         self.show_all()
 
@@ -61,8 +86,10 @@ class TreeViewFilterWindow(Gtk.Window):
         return True
 
 
+    def on_selection_button_clicked(self, widget):
+        pass
+
 win = TreeViewFilterWindow()
-print(win.movie_liststore)
 win.connect("destroy", Gtk.main_quit)
 win.show_all()
 Gtk.main()
