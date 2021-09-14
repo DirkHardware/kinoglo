@@ -4,6 +4,7 @@ import json
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
+movie_attributes = ["Title", "Director", "Year", "Country", "Genre", "Directory", "Size"]
 
 class TreeViewFilterWindow(Gtk.Window):
     def __init__(self):
@@ -49,19 +50,19 @@ class TreeViewFilterWindow(Gtk.Window):
         self.treeview = Gtk.TreeView(model=self.movie_liststore)
         
         for i, column_title in enumerate(
-                ["Title", "Director", "Year", "Country", "Genre", "Directory", "Size"]
+                #["Title", "Director", "Year", "Country", "Genre", "Directory", "Size"]
+                movie_attributes
         ):
             renderer = Gtk.CellRendererText()
             column = Gtk.TreeViewColumn(column_title, renderer, text=i)
             column.set_sort_column_id(i)
-            column.connect("clicked", self.on_column_clicked)
             self.treeview.append_column(column)
        
         self.buttons = list()
         
-
-        for prog_language in ["Title", "Director", "Year", "Country", "Genre", "Size"]:
-            button = Gtk.Button(label=prog_language)
+        for attribute in movie_attributes:
+        #for prog_language in ["Title", "Director", "Year", "Country", "Genre", "Size"]:
+            button = Gtk.Button(label=attribute)
             self.buttons.append(button)
             button.connect("clicked", self.on_selection_button_clicked)
         
@@ -87,20 +88,6 @@ class TreeViewFilterWindow(Gtk.Window):
         return True
 
     
-    def compare(model, row1, row2, user_data):
-        sort_column,_ = model.get_sort_column_id()
-        value1 = model.get_value(row1, sort_column)
-        value2 = model.get_value(row2, sort_column)
-        if value1 < value2:
-            return -1
-        elif value1 == value2:
-            return 0
-        else:
-            return 1
-    
-    def on_column_clicked(self, widget):
-        print("Clicked!")
-
     def on_selection_button_clicked(self, widget):
         pass
 
