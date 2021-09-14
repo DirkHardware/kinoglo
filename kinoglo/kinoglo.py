@@ -48,6 +48,7 @@ class TreeViewFilterWindow(Gtk.Window):
         # it can't be sorted.
 
         self.treeview = Gtk.TreeView(model=self.movie_liststore)
+        self.treeview.connect("button_press_event", self.mouse_click_event)
         
         for i, column_title in enumerate(
                 #["Title", "Director", "Year", "Country", "Genre", "Directory", "Size"]
@@ -87,9 +88,21 @@ class TreeViewFilterWindow(Gtk.Window):
     def movie_filter_func(self, model, iter, data):
         return True
 
-    
-    def on_selection_button_clicked(self, widget):
+
+    def on_selection_button_clicked(self):
         pass
+    
+    def mouse_click_event(self, lv, event):
+        if event.button == 3:
+            pthinfo = self.treeview.get_path_at_pos(event.x, event.y)
+            if pthinfo != None:
+                path,col,cellx,celly = pthinfo 
+                self.treeview.grab_focus()
+                self.treeview.set_cursor(path,col,0)
+
+            selection = self.treeview.get_selection()
+            (model, iter) = selection.get_selected()
+            print(model[iter][0])
 
 
 win = TreeViewFilterWindow()
