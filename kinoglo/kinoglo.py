@@ -1,7 +1,6 @@
 import gi
 import os
 import json
-
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
@@ -16,13 +15,13 @@ class TreeViewFilterWindow(Gtk.Window):
         self.grid.set_row_homogeneous(True)
         self.grid.set_column_homogeneous(True)
         self.add(self.grid)
-
         # Creating the ListStore model 
         self.movie_liststore = Gtk.ListStore(str, str, int, str, str, str, int)
         self.root = "/home/anderson/Videos"
         self.dir_list = []
         # Checks all the files in self.root to determine if they are directories,
         # if they are, appends them 
+        
         for dirs in os.listdir(self.root):
             # Makes an absolute path out of every directory in self.root
             abs_path = os.path.join(self.root,dirs)
@@ -50,11 +49,11 @@ class TreeViewFilterWindow(Gtk.Window):
         self.movie_filter = self.movie_liststore.filter_new()
         # setting the filter function
         self.movie_filter.set_visible_func(self.movie_filter_func)
-
         # creating the treview, making it use the filter as a model and 
         # adding the columns (the filter is passed as an argument to treeview)
 
         self.treeview = Gtk.TreeView(model=self.movie_filter)
+        
         for i, column_title in enumerate(
                 ["Title", "Director", "Year", "Country", "Genre", "Directory", "Size"]
         ):
@@ -63,6 +62,8 @@ class TreeViewFilterWindow(Gtk.Window):
             self.treeview.append_column(column)
        
         self.buttons = list()
+        
+
         for prog_language in ["Java", "C", "C++", "Python", "None"]:
             button = Gtk.Button(label=prog_language)
             self.buttons.append(button)
@@ -77,7 +78,7 @@ class TreeViewFilterWindow(Gtk.Window):
         self.grid.attach(self.scrollable_treelist, 0, 0, 8, 10)
         self.grid.attach_next_to(
         self.buttons[0], self.scrollable_treelist, Gtk.PositionType.BOTTOM, 1, 1)
-
+        
         for i, button in enumerate(self.buttons[1:]):
             self.grid.attach_next_to(
                 button, self.buttons[i], Gtk.PositionType.RIGHT, 1, 1)
@@ -87,23 +88,23 @@ class TreeViewFilterWindow(Gtk.Window):
         self.menubar = Gtk.MenuBar()
         self.menubar.set_hexpand(True)
         self.menubar.set_vexpand(True)
-
         self.menu_file = Gtk.MenuItem('File')
         self.menubar.append(self.menu_file)
         
         self.grid.attach_next_to(self.menubar, self.scrollable_treelist, Gtk.PositionType.TOP, 2, 1)
         #menu_preferences = self.submenu(menubar, 'Preferences')
         #menu_filter = self.add_submenu(menubar, 'Filter')
+    
 
         self.show_all()
+    
 
     def movie_filter_func(self, model, iter, data):
         return True
-
+    
 
     def on_selection_button_clicked(self, widget):
         pass
-
 win = TreeViewFilterWindow()
 win.connect("destroy", Gtk.main_quit)
 win.show_all()
