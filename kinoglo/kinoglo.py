@@ -2,7 +2,7 @@ import gi
 import os
 import json
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 
 movie_attributes = ["Title", "Director", "Year", "Country", "Genre", "Directory", "Size"]
 
@@ -99,10 +99,22 @@ class TreeViewFilterWindow(Gtk.Window):
                 path,col,cellx,celly = pthinfo 
                 self.treeview.grab_focus()
                 self.treeview.set_cursor(path,col,0)
+                print(path)
 
             selection = self.treeview.get_selection()
             (model, iter) = selection.get_selected()
             print(model[iter][0])
+        elif event.button == 1 and event.type == Gdk.EventType._2BUTTON_PRESS:
+            pthinfo = self.treeview.get_path_at_pos(event.x, event.y)
+            if pthinfo != None:
+                path,col,cellx,celly = pthinfo 
+                self.treeview.grab_focus()
+                self.treeview.set_cursor(path,col,0)
+                print('doubleclick')
+            
+            selection = self.treeview.get_selection()
+            (model, iter) = selection.get_selected()
+            print(model[iter][5])
 
 
 win = TreeViewFilterWindow()
